@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.1"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+	
+	<display-name>baobaotao</display-name>
+	
+	<!-- 配置Spring MVC 框架  -->
+	<!-- 1，从类路径下加载Spring的配置文件，classpath是指的类路径，多个文件可以使用逗号或者空格分割 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath*:applicationContext.xml</param-value>
+	</context-param>
+	
+	<!-- Spring的MVC相关配置 -->
+	<!-- Spring的相关配置也是通过servlet来截取URL请求来进行相关处理的 -->
+	<!-- Spring MVC的主控servlet -->
+	<servlet>
+		<servlet-name>baobaotao</servlet-name>
+		
+		<!-- 在SpringMVC中有一个约定：和主控servlet名相关有一个配置文件叫${servlet名}-servlet.xml的配置文件在WEB-INFO目录下 -->
+		<!-- 而这个文件无需通过 contextConfigLocation 指定，SpringMVC可以自动加载 -->
+		<!-- 并且还自动加载的文件有${servlet-name}-dao.xml ${servlet-name}-service.xml -->
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		
+		<!-- 这中形式就是采用初始化参数的形式指定SpringMVC的配置文件，建议采用这种形式，
+		会屏蔽前一种方式（自己读取${servlet-name}-servlet.xml） -->
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath*:baobaotao-mvc.xml</param-value>
+		</init-param>
+		
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<!-- Spring MVC处理的URL -->
+	<servlet-mapping>
+		<servlet-name>baobaotao</servlet-name>
+		<!-- 一般在Struts中路径结尾配置用*.do，webwork中用*.action，虽然和框架自身没关系，但是避免通过路径后缀识别系统-->
+		<!-- 我们建议使用*.html作为默认配置，还可以和无需任何处理的静态资（使用*.htm）源区分 -->
+		<url-pattern>*.html</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 2，负责启动Spring容器的监听器，他将引用 标号为1的上下文参数，来获取Spring的配置文件地址-->
+	<!-- 他在启动的时候会去获取contextConfigLocation的值来加载Spring的配置文件来获取必要的信息 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+</web-app>
