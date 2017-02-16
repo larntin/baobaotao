@@ -5,14 +5,20 @@
 	
 	<display-name>baobaotao</display-name>
 	
-	<!-- 配置Spring MVC 框架  -->
+	<!-- 配置Spring框架  -->
 	<!-- 1，从类路径下加载Spring的配置文件，classpath是指的类路径，多个文件可以使用逗号或者空格分割 -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath*:applicationContext.xml</param-value>
 	</context-param>
 	
-	<!-- Spring的MVC相关配置 -->
+	<!-- 2，负责启动Spring容器的监听器，他将引用 标号为1的上下文参数，来获取Spring的配置文件地址-->
+	<!-- 他在启动的时候会去获取contextConfigLocation的值来加载Spring的配置文件来获取必要的信息 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	<!-- Spring的MVC相关配置，区别于Spring框架的配置，有些程序不需要SpringMVC，就不需要SpringMVC的配置 -->
 	<!-- Spring的相关配置也是通过servlet来截取URL请求来进行相关处理的 -->
 	<!-- Spring MVC的主控servlet -->
 	<servlet>
@@ -40,11 +46,5 @@
 		<!-- 我们建议使用*.html作为默认配置，还可以和无需任何处理的静态资（使用*.htm）源区分 -->
 		<url-pattern>*.html</url-pattern>
 	</servlet-mapping>
-	
-	<!-- 2，负责启动Spring容器的监听器，他将引用 标号为1的上下文参数，来获取Spring的配置文件地址-->
-	<!-- 他在启动的时候会去获取contextConfigLocation的值来加载Spring的配置文件来获取必要的信息 -->
-	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
 	
 </web-app>
